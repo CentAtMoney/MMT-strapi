@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bookings",
+  "info": {
+    "name": "Bookings",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startDatetime": {
+      "type": "datetime"
+    },
+    "endDatetime": {
+      "type": "datetime"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Declined",
+        "Booked",
+        "Ongoing",
+        "Completed"
+      ]
+    },
+    "job": {
+      "via": "bookings",
+      "model": "jobs"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "address": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "author": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "bookings"
+    }
+  }
+}

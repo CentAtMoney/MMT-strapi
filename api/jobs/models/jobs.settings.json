@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "jobs",
+  "info": {
+    "name": "Jobs",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "image": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "listed": {
+      "type": "boolean"
+    },
+    "SeoUrl": {
+      "type": "uid"
+    },
+    "upvotes": {
+      "type": "biginteger"
+    },
+    "downvotes": {
+      "type": "biginteger"
+    },
+    "author": {
+      "via": "jobs",
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "bookings": {
+      "via": "job",
+      "collection": "bookings"
+    },
+    "tags": {
+      "type": "text"
+    }
+  }
+}
