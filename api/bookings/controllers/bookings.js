@@ -2,21 +2,19 @@
 const { sanitizeEntity } = require('strapi-utils');
 
 
-/**
- * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
- * to customize this controller
- */
-
 module.exports = {
 
 	async create(ctx) {
 		let entity;
 		if (ctx.is('multipart')) {
 			const { data, files } = parseMultipartData(ctx);
-			data.author = ctx.state.user.id;
+			// not sure if all author fields need to be set or if just setting id
+			// is good enough security wise
+			// shouldn't be getting author via bookings anyway
+			data.author.id = ctx.state.user.id;
 			entity = await strapi.services.bookings.create(data, { files });
 		} else {
-			ctx.request.body.author = ctx.state.user.id;
+			ctx.request.body.author.id = ctx.state.user.id;
 			entity = await strapi.services.bookings.create(ctx.request.body);
 		}
 		return sanitizeEntity(entity, { model: strapi.models.bookings });
@@ -92,7 +90,10 @@ module.exports = {
 	},
 	async accept(ctx) {
 		const entity = await strapi.services.bookings.findOne({ id: ctx.params.id });
-		if(entity.job.author.id === ctx.state.user.id) {
+		if(entity.status !== "Pending") {
+			return ctx.unauthorized(`You can't accept this booking`);
+		}
+		if((entity.job.author.id === ctx.state.user.id)) {
 			entity.status = "Booked";
 			return sanitizeEntity(entity, { model: strapi.models.bookings });
 		}

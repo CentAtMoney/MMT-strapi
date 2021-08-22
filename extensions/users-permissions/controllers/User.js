@@ -7,7 +7,7 @@ const sanitizeUser = user =>
 
 
 
-const privateFields = [
+const protectedFields = [
 "username",
 "email",
 "provider",
@@ -26,10 +26,9 @@ module.exports = {
 		if (data) {
 			data = sanitizeUser(data);
 			const user = ctx.state.user;
-			if(user && (user.id === id)) {
-				//keep protected fields
-			} else {
-				for(const field of privateFields) {
+			if(!user || (user.id !== id)) {
+				//remove protected fields
+				for(const field of protectedFields) {
 					data[field] = undefined;
 				}
 			}

@@ -1,3 +1,3 @@
-# Strapi application
+# The MMT backend
 
-A quick description of your strapi application
+
